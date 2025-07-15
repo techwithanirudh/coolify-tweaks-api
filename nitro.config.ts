@@ -10,6 +10,7 @@ export default defineNitroConfig({
     openAPI: true,
   },
   openAPI: {
+    route: '/_docs/openapi.json',
     meta: {
       title: 'Coolify Tweaks API',
       description: 'Proxies GitHub release assets for Coolify Tweaks',
@@ -17,7 +18,11 @@ export default defineNitroConfig({
     },
     ui: {
       scalar: {
+        route: '/_docs/scalar',
         theme: 'purple',
+      },
+      swagger: {
+        route: '/_docs/swagger',
       },
     },
   },
