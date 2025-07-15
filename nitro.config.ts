@@ -2,6 +2,7 @@ import { defineNitroConfig } from 'nitropack/config';
 
 export default defineNitroConfig({
   srcDir: 'server',
+  preset: 'vercel',
   compatibilityDate: '2025-07-15',
   imports: {
     autoImport: false,
