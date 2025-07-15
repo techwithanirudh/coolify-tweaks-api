@@ -57,7 +57,7 @@ export default defineEventHandler(async (event) => {
     setHeader(event, 'X-Proxy-Host', 'github.com');
 
     const headers = new Headers(rawHeaders);
-    
+
     for (const headerName of allowedHeaders) {
       const value = headers.get(headerName);
       if (value) {
