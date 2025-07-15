@@ -1,5 +1,9 @@
 import { defineEventHandler } from '#imports';
 
 export default defineEventHandler((_event) => {
-  return 'Start by editing <code>server/routes/index.ts</code>.';
+  return {
+    service: 'Coolify Tweaks API',
+    description: 'Proxies GitHub release assets for Coolify Tweaks',
+    version: '1.0',
+  };
 });
