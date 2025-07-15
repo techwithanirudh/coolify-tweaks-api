@@ -25,5 +25,5 @@ export default defineNitroConfig({
         route: '/_docs/swagger',
       },
     },
-  }
+  },
 });
