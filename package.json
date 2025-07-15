@@ -1,10 +1,24 @@
 {
+  "name": "coolify-tweaks-api",
+  "type": "module",
   "private": true,
   "scripts": {
     "build": "nitro build",
     "dev": "nitro dev",
     "prepare": "nitro prepare",
-    "preview": "node .output/server/index.mjs"
+    "preview": "node .output/server/index.mjs",
+    "format": "bun ultracite format",
+    "types:check": "tsc --noEmit --skipLibCheck"
+  },
+  "dependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/format": "^19.8.1",
+    "@commitlint/types": "^19.8.1",
+    "zod": "^4.0.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.6",

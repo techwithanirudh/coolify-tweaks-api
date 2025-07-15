@@ -1,6 +1,105 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
-  "extends": [
-    "ultracite"
-  ]
+  "extends": ["ultracite"],
+  "javascript": {
+    "globals": [
+      // Nitro runtime imports
+      "useNitroApp",
+      "useRuntimeConfig",
+      "useAppConfig",
+      "defineNitroPlugin",
+      "nitroPlugin",
+      "defineCachedFunction",
+      "defineCachedEventHandler",
+      "cachedFunction",
+      "cachedEventHandler",
+      "useStorage",
+      "defineRenderHandler",
+      "defineRouteMeta",
+      "getRouteRules",
+      "useEvent",
+      "defineTask",
+      "runTask",
+      "defineNitroErrorHandler",
+      "defineNitroConfig",
+      // H3 event handler imports
+      "defineEventHandler",
+      "defineLazyEventHandler",
+      "eventHandler",
+      "lazyEventHandler",
+      "toEventHandler",
+      "isEventHandler",
+      "fromNodeMiddleware",
+      "toNodeListener",
+      "toWebHandler",
+      "fromPlainHandler",
+      "fromWebHandler",
+      // H3 error handling
+      "createError",
+      "sendError",
+      // H3 response utilities
+      "send",
+      "sendNoContent",
+      "sendRedirect",
+      "sendStream",
+      "sendWebResponse",
+      "isStream",
+      "isWebResponse",
+      // H3 header utilities
+      "setHeader",
+      "getHeader",
+      "getHeaders",
+      "setHeaders",
+      "appendHeader",
+      "removeHeader",
+      "clearHeaders",
+      "getRequestHeaders",
+      "getRequestHeader",
+      "getResponseHeaders",
+      "getResponseHeader",
+      "writeEarlyHints",
+      // H3 cookie utilities
+      "setCookie",
+      "getCookie",
+      "deleteCookie",
+      "serializeCookie",
+      "parseCookies",
+      "splitCookiesString",
+      // H3 body parsing
+      "readBody",
+      "readRawBody",
+      "readFormData",
+      "readMultipartFormData",
+      // H3 URL and request utilities
+      "getQuery",
+      "getRouterParam",
+      "getRouterParams",
+      "getValidatedQuery",
+      "getValidatedRouterParams",
+      "parseURL",
+      "getRequestURL",
+      "getRequestHost",
+      "getRequestProtocol",
+      "getRequestIP",
+      "getClientIP",
+      "getRequestFingerprint",
+      // H3 status utilities
+      "sanitizeStatusCode",
+      "sanitizeStatusMessage",
+      "getResponseStatus",
+      "getResponseStatusText",
+      // H3 method utilities
+      "isMethod",
+      "assertMethod",
+      // H3 CORS utilities
+      "getCors",
+      "isCorsOriginAllowed",
+      "isPreflightRequest",
+      "handleCors",
+      // H3 cache utilities
+      "handleCacheHeaders",
+      // Other common globals
+      "$fetch"
+    ]
+  }
 }
