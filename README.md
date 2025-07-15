@@ -18,13 +18,13 @@ Want the latest Coolify Tweaks with a custom theme? Just grab it:
 
 ```bash
 # Get the latest release with default styling
-curl "https://tweaks-api.yourdomain.com/api/release/latest"
+curl "https://tweaks-api.yourdomain.com/release/latest"
 
 # Apply a theme from TweakCN
-curl "https://tweaks-api.yourdomain.com/api/release/latest?theme=claude"
+curl "https://tweaks-api.yourdomain.com/release/latest?theme=claude"
 
 # Get a specific asset
-curl "https://tweaks-api.yourdomain.com/api/release/latest?asset=coolify-tweaks.zip"
+curl "https://tweaks-api.yourdomain.com/release/latest?asset=coolify-tweaks.zip"
 ```
 
 ### For Developers
@@ -47,7 +47,7 @@ bun run deploy
 
 ### Get Release Asset
 ```http
-GET /api/release/:tag
+GET /release/:tag
 ```
 
 **Query Parameters:**
@@ -57,19 +57,19 @@ GET /api/release/:tag
 **Examples:**
 ```bash
 # Latest release with default asset
-GET /api/release/latest
+GET /release/latest
 
 # Specific version
-GET /api/release/v1.2.0
+GET /release/v1.2.0
 
 # Custom asset
-GET /api/release/latest?asset=installer.js
+GET /release/latest?asset=installer.js
 
 # With TweakCN theme (this is where the magic happens)
-GET /api/release/latest?theme=claude&asset=main.user.css
+GET /release/latest?theme=claude&asset=main.user.css
 
 # Download as zip
-GET /api/release/latest?asset=coolify-tweaks.zip
+GET /release/latest?asset=coolify-tweaks.zip
 ```
 
 ### Health Check
