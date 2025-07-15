@@ -6,8 +6,10 @@ export default defineNitroConfig({
   imports: {
     autoImport: false,
   },
+  experimental: {
+    openAPI: true,
+  },
   openAPI: {
-    route: '/_docs/openapi.json',
     meta: {
       title: 'Coolify Tweaks API',
       description: 'Proxies GitHub release assets for Coolify Tweaks',
