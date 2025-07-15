@@ -1,9 +1,11 @@
+import mime from 'mime';
+import { ofetch } from 'ofetch';
 import {
   createError,
   defineEventHandler,
   getQuery,
   getRouterParam,
-  processContent
+  processContent,
 } from '#imports';
 import { owner, repo } from '~/config';
 
@@ -23,41 +25,40 @@ export default defineEventHandler(async (event) => {
   const url = `https://github.com/${owner}/${repo}/releases/${encodeURIComponent(tag)}/download/${encodeURIComponent(asset)}`;
 
   try {
-    const response = await $fetch.raw(url, {
+    const {
+      _data: content,
+      headers: rawHeaders,
+      status,
+      statusText,
+      ok,
+    } = await ofetch.raw(url, {
       method: 'GET',
       responseType: 'text',
       ignoreResponseError: true,
       retry: 0,
-      headers: {
-        Accept: '*/*',
-      },
+      headers: { Accept: '*/*' },
     });
 
-    if (!response.ok) {
+    if (!ok) {
       throw createError({
-        status: response.status,
-        statusMessage: response.statusText,
-        message: `GitHub returned ${response.status}: ${response.statusText}`,
+        status,
+        statusMessage: statusText,
+        message: `GitHub returned ${status}: ${statusText}`,
         data: { url, tag },
       });
     }
 
-    const content = await response.text();
-    const processed = await processContent({
-      content,
-      event,
-    });
+    const processed = await processContent({ content: content ?? '', event });
 
-    const headers = new Headers(response.headers);
+    const headers = new Headers(rawHeaders);
+    const detected = mime.getType(asset);
 
+    headers.set('Content-Type', detected || 'application/octet-stream');
     headers.set('X-Proxy-Host', 'github.com');
     headers.delete('Content-Encoding');
     headers.delete('Content-Disposition');
 
-    return new Response(processed, {
-      status: response.status,
-      headers,
-    });
+    return new Response(processed, { status, headers });
   } catch (error) {
     throw createError({
       status: 500,
