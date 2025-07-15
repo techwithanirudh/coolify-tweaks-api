@@ -60,7 +60,7 @@ export async function processContent({
       'm'
     );
 
-    const url = getRequestURL(event).pathname;
+    const url = getRequestURL(event).toString();
     result = changeMetadata(result, 'updateURL', url);
 
     if (themeRegex.test(result)) {

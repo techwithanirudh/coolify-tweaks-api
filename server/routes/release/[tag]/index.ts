@@ -1,3 +1,4 @@
+import { setHeader } from 'h3';
 import mime from 'mime';
 import { ofetch } from 'ofetch';
 import {
@@ -7,7 +8,7 @@ import {
   getRouterParam,
   processContent,
 } from '#imports';
-import { owner, repo } from '~/config';
+import { allowedHeaders, owner, repo } from '~/config';
 
 export default defineEventHandler(async (event) => {
   const tag = getRouterParam(event, 'tag');
@@ -50,15 +51,21 @@ export default defineEventHandler(async (event) => {
 
     const processed = await processContent({ content: content ?? '', event });
 
-    const headers = new Headers(rawHeaders);
     const detected = mime.getType(asset);
 
-    headers.set('Content-Type', detected || 'application/octet-stream');
-    headers.set('X-Proxy-Host', 'github.com');
-    headers.delete('Content-Encoding');
-    headers.delete('Content-Disposition');
+    setHeader(event, 'Content-Type', detected || 'application/octet-stream');
+    setHeader(event, 'X-Proxy-Host', 'github.com');
 
-    return new Response(processed, { status, headers });
+    const headers = new Headers(rawHeaders);
+    
+    for (const headerName of allowedHeaders) {
+      const value = headers.get(headerName);
+      if (value) {
+        setHeader(event, headerName, value);
+      }
+    }
+
+    return processed;
   } catch (error) {
     throw createError({
       status: 500,
