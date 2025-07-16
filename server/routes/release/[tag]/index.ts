@@ -23,7 +23,10 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const url = `https://github.com/${owner}/${repo}/releases/${encodeURIComponent(tag)}/download/${encodeURIComponent(asset)}`;
+  const url =
+    tag === 'latest'
+      ? `https://github.com/${owner}/${repo}/releases/latest/download/${encodeURIComponent(asset)}`
+      : `https://github.com/${owner}/${repo}/releases/download/${encodeURIComponent(tag)}/${encodeURIComponent(asset)}`;
 
   try {
     const {
