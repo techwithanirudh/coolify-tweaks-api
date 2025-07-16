@@ -11,10 +11,13 @@ function isCUID(id: string): boolean {
   return CUID_REGEX.test(id);
 }
 
+const buildThemeUrl = (id: string) => {
+  const safeId = encodeURIComponent(id);
+  return `https://tweakcn.com/r/themes/${safeId}${isCUID(id) ? '' : '.json'}`;
+};
+
 export async function getThemeCss(themeId: string): Promise<string | null> {
-  const url = isCUID(themeId)
-    ? `https://tweakcn.com/r/themes/${encodeURIComponent(themeId)}`
-    : `https://tweakcn.com/r/themes/${encodeURIComponent(themeId)}.json`;
+  const url = buildThemeUrl(themeId);
 
   try {
     const theme = await ofetch<RegistryItem>(url, {
