@@ -5,9 +5,16 @@ import { cssVarsToCss } from './css-transformer';
 
 const THEME_START = '/* ==UI-THEME-VARS:START== */';
 const THEME_END = '/* ==UI-THEME-VARS:END== */';
+const CUID_REGEX = /^c[a-z0-9]{24}$/;
+
+function isCUID(id: string): boolean {
+  return CUID_REGEX.test(id);
+}
 
 export async function getThemeCss(themeId: string): Promise<string | null> {
-  const url = `https://tweakcn.com/r/themes/${encodeURIComponent(themeId)}`;
+  const url = isCUID(themeId)
+    ? `https://tweakcn.com/r/themes/${encodeURIComponent(themeId)}`
+    : `https://tweakcn.com/r/themes/${encodeURIComponent(themeId)}.json`;
 
   try {
     const theme = await ofetch<RegistryItem>(url, {
@@ -67,8 +74,13 @@ export async function processContent({
       'm'
     );
 
-    const url = getRequestURL(event).toString();
-    result = changeMetadata(result, 'updateURL', url);
+    const url = getRequestURL(event);
+    const searchParams = new URLSearchParams(url.search);
+    result = changeMetadata(
+      result,
+      'updateURL',
+      `${url.origin}/release/latest/?${searchParams.toString()}`
+    );
 
     if (themeRegex.test(result)) {
       result = result.replace(themeRegex, wrappedCss);
