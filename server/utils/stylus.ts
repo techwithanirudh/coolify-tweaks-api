@@ -1,4 +1,4 @@
-import { getQuery, getRequestURL, type H3Event } from 'h3';
+import { createError, getQuery, getRequestURL, type H3Event } from 'h3';
 import { ofetch } from 'ofetch';
 import { type RegistryItem, registryItemSchema } from '../lib/validators';
 import { cssVarsToCss } from './css-transformer';
@@ -17,13 +17,20 @@ export async function getThemeCss(themeId: string): Promise<string | null> {
 
     const parsed = registryItemSchema.safeParse(theme);
     if (!parsed.success) {
-      return null;
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Invalid theme data',
+        data: parsed.error.issues,
+      });
     }
 
     const registryItem = parsed.data;
     return cssVarsToCss(registryItem.cssVars ?? {});
   } catch {
-    return null;
+    throw createError({
+      statusCode: 404,
+      statusMessage: `Theme not found: ${themeId}`,
+    });
   }
 }
 

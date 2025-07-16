@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-// Note: if you edit the schema here, you must also edit the schema in the
-// apps/www/public/schema/registry-item.json file.
+// Note: this file is adapted from the original `registry` file in the `shadcn/registry` package.
 
 export const registryItemTypeSchema = z.enum([
   'registry:lib',

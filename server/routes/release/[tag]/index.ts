@@ -70,7 +70,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       status: 500,
       statusMessage: 'Internal Server Error',
-      message: `Failed to fetch from GitHub: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      message: `${error instanceof Error ? error.message : 'Unknown error'}`,
       data: { url, tag },
     });
   }
