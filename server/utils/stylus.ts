@@ -1,6 +1,6 @@
 import { createError, getQuery, getRequestURL, type H3Event } from 'h3';
 import { ofetch } from 'ofetch';
-import { type RegistryItem, registryItemSchema } from '../lib/validators';
+import { type RegistryItem, registryItemSchema } from 'shadcn/registry';
 import { cssVarsToCss } from './css-transformer';
 
 const THEME_START = '/* ==UI-THEME-VARS:START== */';
