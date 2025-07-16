@@ -5,11 +5,16 @@ import { cssVarsToCss } from './css-transformer';
 
 const THEME_START = '/* ==UI-THEME-VARS:START== */';
 const THEME_END = '/* ==UI-THEME-VARS:END== */';
-const CUID_REGEX = /^c[a-z0-9]{24}$/;
 
-function isCUID(id: string): boolean {
-  return CUID_REGEX.test(id);
-}
+const ESCAPED_THEME_BLOCK = new RegExp(
+  `${THEME_START.replace(/[-[\]{}()*+?.\\^$|]/g, '\\$&')}` +
+    '[\\s\\S]*?' +
+    `${THEME_END.replace(/[-[\]{}()*+?.\\^$|]/g, '\\$&')}`,
+  'm'
+);
+
+const CUID_REGEX = /^c[a-z0-9]{24}$/;
+const isCUID = (id: string) => CUID_REGEX.test(id);
 
 const buildThemeUrl = (id: string) => {
   const safeId = encodeURIComponent(id);
@@ -49,8 +54,8 @@ export function changeMetadata(
   field: string,
   value: string
 ): string {
-  const metaRegex = new RegExp(`^(@${field}\\s+).+$`, 'm');
-  return content.replace(metaRegex, `$1${value}`);
+  const rx = new RegExp(`^(@${field}\\s+).+$`, 'm');
+  return content.replace(rx, `$1${value}`);
 }
 
 export async function processContent({
@@ -60,9 +65,10 @@ export async function processContent({
   content: string;
   event: H3Event;
 }): Promise<string | null | undefined> {
-  const query = getQuery(event);
-  const theme = query.theme as string | undefined;
-  const asset = (query.asset as string) ?? 'main.user.css';
+  const { theme, asset = 'main.user.css' } = getQuery(event) as Record<
+    string,
+    string
+  >;
 
   let result = content;
 
@@ -70,24 +76,18 @@ export async function processContent({
     const css = await getThemeCss(theme);
     const wrappedCss = `${THEME_START}\n${css}\n${THEME_END}`;
 
-    const escapedStart = THEME_START.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
-    const escapedEnd = THEME_END.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
-    const themeRegex = new RegExp(
-      `${escapedStart}[\\s\\S]*?${escapedEnd}`,
-      'm'
-    );
-
     const url = getRequestURL(event);
     const searchParams = new URLSearchParams(url.search);
+
     result = changeMetadata(
       result,
       'updateURL',
       `${url.origin}/release/latest/?${searchParams.toString()}`
     );
 
-    if (themeRegex.test(result)) {
-      result = result.replace(themeRegex, wrappedCss);
-    }
+    // biome-ignore lint/style/useBlockStatements: the code is more readable this way
+    if (ESCAPED_THEME_BLOCK.test(result))
+      result = result.replace(ESCAPED_THEME_BLOCK, wrappedCss);
   }
 
   return result;
